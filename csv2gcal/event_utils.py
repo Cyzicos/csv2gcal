@@ -1,10 +1,12 @@
 import csv
+from csv2gcal import date_utils
 
 
 def stage_events(events):
     events = remove_garbage(events)
-    events = conv_times(events)
     events = merge_all_cols(events,  cols=[2, 3], sep=', ')
+    events = conv_dates(events)
+    events = to_dicts(events)
     return events
 
 
@@ -18,12 +20,20 @@ def remove_garbage(events):
     return [event for event in events if is_valid_event(event)]
 
 
-def conv_times(events):
-    return [event_time_conv(event) for event in events]
-
-
 def merge_all_cols(events, **kwargs):
     return [merge_cols(event, **kwargs) for event in events]
+
+
+def to_dicts(events):
+    return [to_dict(event) for event in events]
+
+
+def to_dict(event):
+    return {'date': event[0], 'title': event[1], 'location': event[2]}
+
+
+def conv_dates(events):
+    return [event_date_conv(event) for event in events]
 
 
 def is_int(s):
@@ -40,13 +50,8 @@ def is_valid_event(event):
     return is_int(event[0][0])
 
 
-def time_conv(time):
-    day, mon, year = time.split('/')
-    return f'{year}-{mon}-{day}'
-
-
-def event_time_conv(event):
-    event[0] = time_conv(event[0])
+def event_date_conv(event):
+    event[0] = date_utils.date_conv(event[0])
     return event
 
 
