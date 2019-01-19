@@ -1,3 +1,5 @@
+'''Uses google calender api utils'''
+
 import datetime
 from googleapiclient.discovery import build
 from httplib2 import Http

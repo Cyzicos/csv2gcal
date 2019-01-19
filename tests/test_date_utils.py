@@ -1,3 +1,5 @@
+''' Tests for date_utils'''
+
 from csv2gcal import date_utils
 
 
